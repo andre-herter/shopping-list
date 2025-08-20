@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "./components/ui/button";
 import { toast } from "sonner";
 import { CheckCircleIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "./components/mode-toggle";
 
@@ -12,11 +12,25 @@ type Product = {
   quantity: number;
 };
 
+const LOCAL_STORAGE_KEY = "shoppinglist";
+
 function App() {
   const [productName, setProductName] = useState("");
   const [productQuantity, setProductQuantity] = useState(1);
 
   const [list, setList] = useState<Product[]>([]);
+
+  const dataLoaded = useRef(false);
+
+  useEffect(() => {
+    setList(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"));
+    dataLoaded.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (dataLoaded.current)
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
+  }, [list]);
 
   return (
     <>
