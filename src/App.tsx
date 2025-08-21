@@ -35,7 +35,7 @@ function App() {
 
   return (
     <>
-      <div className="w-full max-w-lg mx-auto flex justify-end mt-2 px-4">
+      <div className="w-full max-w-lg mx-auto flex justify-end mt-5 px-4">
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <ModeToggle />
         </ThemeProvider>
