@@ -2,7 +2,7 @@ import "./App.css";
 import { Input } from "@/components/ui/input";
 import { Button } from "./components/ui/button";
 import { toast } from "sonner";
-import { CheckCircleIcon } from "lucide-react";
+import { CheckCircleIcon, TrashIcon, Undo2Icon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "./components/mode-toggle";
@@ -10,6 +10,7 @@ import { ModeToggle } from "./components/mode-toggle";
 type Product = {
   name: string;
   quantity: number;
+  completed: boolean;
 };
 
 const LOCAL_STORAGE_KEY = "shoppinglist";
@@ -34,7 +35,7 @@ function App() {
 
   return (
     <>
-      <div className="flex justify-center mt-2">
+      <div className="w-full max-w-lg mx-auto flex justify-end mt-2 px-4">
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <ModeToggle />
         </ThemeProvider>
@@ -73,7 +74,11 @@ function App() {
             }
 
             setList([
-              { name: productName, quantity: productQuantity },
+              {
+                name: productName,
+                quantity: productQuantity,
+                completed: false,
+              },
               ...list,
             ]);
 
@@ -91,15 +96,75 @@ function App() {
               className="rounded-xl border bg-card texr-card-foreground shadow p-6 flex justify-between items-center  "
             >
               <div>
-                <h3 className="text-lg font-semibold">{item.name}</h3>
+                <h3
+                  className={`text-lg font-semibold${
+                    item.completed ? "text-muted-foreground line-through" : ""
+                  }`}
+                >
+                  {item.name}
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   Anzahl: {item.quantity}
                 </p>
               </div>
-              <Button size={"lg"} variant={"outline"}>
-                <CheckCircleIcon />
-                Abhaken
-              </Button>
+              {item.completed ? (
+                <div className="flex gap-2">
+                  <Button
+                    variant={"destructive"}
+                    size={"icon"}
+                    onClick={() => {
+                      setList([
+                        ...list.filter(
+                          (listItem) => listItem.name !== item.name
+                        ),
+                      ]);
+
+                      toast("Produkt gelöscht!", {
+                        description:
+                          item.name + " wurde aus der Einkaufsliste entfernt",
+                      });
+                    }}
+                  >
+                    <TrashIcon />
+                  </Button>
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => {
+                      setList([
+                        {
+                          name: item.name,
+                          quantity: item.quantity,
+                          completed: false,
+                        },
+                        ...list.filter(
+                          (listItem) => listItem.name !== item.name
+                        ),
+                      ]);
+                    }}
+                  >
+                    <Undo2Icon />
+                    Zurück
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  size={"lg"}
+                  variant={"outline"}
+                  onClick={() => {
+                    setList([
+                      ...list.filter((listItem) => listItem.name !== item.name),
+                      {
+                        name: item.name,
+                        quantity: item.quantity,
+                        completed: true,
+                      },
+                    ]);
+                  }}
+                >
+                  <CheckCircleIcon />
+                  Abhaken
+                </Button>
+              )}
             </div>
           ))}
         </div>
