@@ -40,7 +40,6 @@ function App() {
           <ModeToggle />
         </ThemeProvider>
       </div>
-
       <div className="w-full max-w-lg mx-auto flex flex-col items-center justify-center px-4">
         <h1 className=" text-3xl font-semibold mt-16 mb-18">Einkaufsliste</h1>
         <div className="flex w-full gap-2">
