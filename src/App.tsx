@@ -84,7 +84,6 @@ function App() {
 
             setProductQuantity(1);
             setProductName("");
-            toast.success("Produkt erfolgreich hinzugefügt!");
           }}
         >
           Eintrag Hinzufügen
@@ -119,7 +118,7 @@ function App() {
                         ),
                       ]);
 
-                      toast("Produkt gelöscht!", {
+                      toast.success("Produkt gelöscht!", {
                         description:
                           item.name + " wurde aus der Einkaufsliste entfernt",
                       });
